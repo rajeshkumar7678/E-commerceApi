@@ -5,11 +5,13 @@ const { catroute } = require("./routes/category.route")
 const { productroute } = require("./routes/product.route")
 const { cartroute } = require("./routes/cart.route")
 const { orderroute } = require("./routes/order.route")
+const  cors  = require ("cors")
 const swaggerJSdoc=require("swagger-jsdoc")
 
 const swaggerUI=require("swagger-ui-express")
 
 const app=express()
+app.use(cors())
 app.use(express.json())
 const port=4545
 
@@ -42,9 +44,9 @@ const options={
     },
     apis:["./routes/*.js"]
 }
-//specification
+
 const swaggerSpec= swaggerJSdoc(options)
-//building UI
+
 app.use("/doc",swaggerUI.serve,swaggerUI.setup(swaggerSpec))
 
 

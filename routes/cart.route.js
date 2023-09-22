@@ -1,14 +1,80 @@
 const express=require("express")
 const { auth } = require("../middleware/auth.middleware")
 const { cartmodel } = require("../model/cart.model")
-const { productmodel } = require("../model/productmodel")
 
 const cartroute=express.Router()
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     cartItemSchema:
+ *       type: object
+ *       properties:
+ *         product:
+ *           type: string
+ *           description: The ID of the product in the cart item.
+ *         quantity:
+ *           type: integer
+ *           description: The quantity of the product in the cart item.
+ *       required:
+ *         - product
+ *         - quantity
+ *     
+ *     cartSchema:
+ *       type: object
+ *       properties:
+ *         user:
+ *           type: string
+ *           description: The ID of the user who owns the cart.
+ *         item:
+ *           type: array
+ *           description: An array of cart items containing products and quantities.
+ *           items:
+ *             $ref: '#/components/schemas/cartItemSchema'
+ *       required:
+ *         - user
+ */
 
 cartroute.get("/",auth,(req,res)=>{
     res.send("cart page")
 })
 
+/**
+ * @swagger
+ * /cart/add:
+ *   post:
+ *     summary: Add a product to the user's cart
+ *     description: Add a product to the user's cart or update the quantity if the product is already in the cart.
+ *     tags:
+ *       - Cart
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productid:
+ *                 type: string
+ *               quantity:
+ *                 type: integer
+ *             required:
+ *               - productid
+ *               - quantity
+ *     responses:
+ *       200:
+ *         description: Product added to the cart successfully
+ *       400:
+ *         description: Bad request, missing required fields or invalid input
+ *       401:
+ *         description: Unauthorized, user not authenticated
+ *       500:
+ *         description: Internal server error
+ */
 
 cartroute.post("/add",auth,async(req,res)=>{
     try {
@@ -49,6 +115,43 @@ cartroute.post("/add",auth,async(req,res)=>{
     }
 })
 
+
+/**
+ * @swagger
+ * /cart:
+ *   get:
+ *     summary: Get user's shopping cart
+ *     description: Retrieve a user's shopping cart with the list of items.
+ *     tags:
+ *       - Cart
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User's shopping cart retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               description: An array of shopping cart items.
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     description: The unique identifier for the cart item.
+ *                   product:
+ *                     $ref: '#/components/schemas/productSchema'
+ *                   quantity:
+ *                     type: number
+ *                     description: The quantity of the product in the cart.
+ *       401:
+ *         description: Unauthorized. User is not authenticated.
+ *       500:
+ *         description: Internal server error. Something went wrong on the server.
+ */
+
+
 //get all carddata----------------------------------------------------------------
 cartroute.get("/cart",auth,async(req,res)=>{
     try {
@@ -60,6 +163,44 @@ cartroute.get("/cart",auth,async(req,res)=>{
     }
 })
 
+/**
+ * @swagger
+ * /cart/cart/{productid}:
+ *   put:
+ *     summary: Update the quantity of a product in the user's cart
+ *     description: Update the quantity of a specific product in the user's cart.
+ *     tags:
+ *       - Cart
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: productid
+ *         in: path
+ *         description: ID of the product to update in the cart
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: quantity
+ *         in: body
+ *         description: New quantity of the product in the cart
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             quantity:
+ *               type: integer
+ *         example:
+ *           quantity: 3
+ *     responses:
+ *       200:
+ *         description: Quantity updated successfully
+ *       400:
+ *         description: Bad request, missing required fields or invalid input
+ *       401:
+ *         description: Unauthorized, user not authenticated
+ *       500:
+ *         description: Internal server error
+ */
 
 //update cart----------------------------------------------------------------------
 cartroute.put("/cart/:productid",auth,async(req,res)=>{
@@ -79,6 +220,35 @@ cartroute.put("/cart/:productid",auth,async(req,res)=>{
     }
     
 })
+
+
+/**
+ * @swagger
+ * /api/cart/{productid}:
+ *   delete:
+ *     summary: Remove a product from the user's cart
+ *     description: Remove a specific product from the user's cart.
+ *     tags:
+ *       - Cart
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: productid
+ *         in: path
+ *         description: ID of the product to remove from the cart
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Product removed from the cart successfully
+ *       400:
+ *         description: Bad request, missing required fields or invalid input
+ *       401:
+ *         description: Unauthorized, user not authenticated
+ *       500:
+ *         description: Internal server error
+ */
 
 cartroute.delete("/cart/:productid",auth,async(req,res)=>{
     try {
