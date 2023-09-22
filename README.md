@@ -29,15 +29,10 @@ The E-Commerce Platform is a comprehensive online shopping platform designed to 
 
 - **Categories**: Products are categorized for easy navigation.
 
-- **Search Functionality**: Users can search for products by name, category, or keywords.
-
-- **Payment Integration**: Integration with a payment gateway for secure transactions.
-
-- **Responsive Design**: The platform is fully responsive, ensuring a seamless experience on various devices.
   
  # Table of contents
  
-  ## QR-Insight/
+  ## E-commerceApi/
 
   
     - controller/
