@@ -3,6 +3,7 @@ const { usermodel } = require("../model/usermodel")
 const userroute=express.Router()
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
+const { client } = require("../controller/redis")
 
 
 /**
@@ -146,7 +147,8 @@ userroute.post("/login",async(req,res)=>{
         }
         
         let token=jwt.sign({id:user._id},"rajesh",{expiresIn:"6h"})
-        res.status(200).send({"msg":"login successfull","token":token})
+        client.set('token', token, 'EX', 21600);
+        res.status(200).send({"msg":"login successfull"})
     } catch (error) {
         res.status(500).send(error.message)
     }

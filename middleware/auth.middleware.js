@@ -1,9 +1,10 @@
-const jwt=require("jsonwebtoken")
+const jwt=require("jsonwebtoken");
+const { client } = require("../controller/redis");
 
 const auth=async (req,res,next)=>{
     try {
-        let {token} = req.headers;
-    // console.log(token)
+        let token = await client.get('token');
+    //console.log(token)
     if(!token){
         return res.status(400).send({"msg":"please login first147"})
     }

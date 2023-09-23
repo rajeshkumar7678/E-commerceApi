@@ -111,6 +111,7 @@ cartroute.post("/add",auth,async(req,res)=>{
          }
         
     } catch (error) {
+        console.log(error)
         res.status(500).status(500).send(error.message)
     }
 })

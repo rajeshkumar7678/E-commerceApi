@@ -146,7 +146,8 @@ orderroute.post("/place",auth,async(req,res)=>{
 
 orderroute.get("/history",auth,async(req,res)=>{
     try {
-        let order=await ordermodel.find({user:req.body.userid}).populate("item.product")
+        let{userid}=req.body
+        let order=await ordermodel.find({user:userid}).populate("item.product")
         res.status(200).send(order)
     } catch (error) {
         res.status(500).send(error.message)

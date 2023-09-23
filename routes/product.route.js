@@ -146,9 +146,9 @@ productroute.get("/product",async(req,res)=>{
  *                 $ref: '#/components/schemas/productSchema'
  */
 //get the product by id-------------------------------------------------------------
-productroute.get("/product/",async(req,res)=>{
+productroute.get("/product/:id",async(req,res)=>{
     try {
-        let {id}=req.query
+        let {id}=req.params
         let product=await productmodel.findOne({_id:id}).populate("categoryid")
         res.status(200).send({"msg":product})
     } catch (error) {

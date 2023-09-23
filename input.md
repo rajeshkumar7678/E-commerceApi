@@ -211,7 +211,6 @@ http://localhost:4545/cart/cart
 //update data to cart-----------------------------------
 http://localhost:4545/cart/cart/650c7f508e8ee8268394f49f
 {
-        "productid": "650c7f508e8ee8268394f49f",
         "quantity": 5
 }
 
